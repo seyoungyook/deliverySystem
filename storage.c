@@ -74,6 +74,7 @@ static void initStorage(int x, int y) {
 //return : 0 - password is matching, -1 - password is not matching
 static int inputPasswd(int x, int y) {
 	
+	
 }
 
 
@@ -86,6 +87,25 @@ static int inputPasswd(int x, int y) {
 //char* filepath : filepath and name to write
 //return : 0 - backup was successfully done, -1 - failed to backup
 int str_backupSystem(char* filepath) {
+	
+	int i,f;
+	
+	FILE *fp;
+	
+	fp = fopen("filepath","w+");
+	fprintf(fp,"%d %d\n",N,M);
+	fprintf(fp,"%c%c%c%c",masterPassword[1],masterPassword[2],masterPassword[3],masterPassword[4]);
+	
+	for(i=0;i<N;i++)
+	{
+		for(j=0;j<M;j++)
+		{
+			if( deliverySystem[i][j].cnt == 1 )
+			{
+				fprintf("%d %d %d %d %c%c%c%c %s",i,j,deliverySystem[i][j].building, deliverySystem[i][j].room,deliverySystem[i][j].passwd[1],deliverySystem[i][j].passwd[2],deliverySystem[i][j].passwd[3],deliverySystem[i][j].passwd[4],deliverySystem[i][j].context);
+			}
+		}
+	}
 	
 }
 
