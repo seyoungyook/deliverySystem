@@ -74,7 +74,19 @@ static void initStorage(int x, int y) {
 //return : 0 - password is matching, -1 - password is not matching
 static int inputPasswd(int x, int y) {
 	
+	char pw[PASSWD_LEN+1];
+	pw[0] = 0;
 	
+	printf(" - input password for (%d,%d) storage : ",x,y);
+	scanf("%4s", pw);
+	fflush(stdin);
+	
+	if(pw[1]==deliverySystem[x][y].passwd[1]&&pw[2]==deliverySystem[x][y].passwd[2]&&pw[3]==deliverySystem[x][y].passwd[3]&&pw[4]==deliverySystem[x][y].passwd[4])
+	{
+		return 0;
+	}
+	else
+		return -1;
 }
 
 
@@ -88,7 +100,7 @@ static int inputPasswd(int x, int y) {
 //return : 0 - backup was successfully done, -1 - failed to backup
 int str_backupSystem(char* filepath) {
 	
-	int i,f;
+	int i,j;
 	
 	FILE *fp;
 	
@@ -107,6 +119,9 @@ int str_backupSystem(char* filepath) {
 		}
 	}
 	
+	fclose(fp);
+	
+	return 0;
 }
 
 
@@ -253,12 +268,19 @@ int str_pushToStorage(int x, int y, int nBuilding, int nRoom, char msg[MAX_MSG_S
 //return : 0 - successfully extracted, -1 = failed to extract
 int str_extractStorage(int x, int y) {
 	
-	printStorageInside(x,y);
-	
-	initStorage(x,y);
-	
-	
-	return 0;
+	if(inputPasswd(x,y)!=0)
+	{
+		printf(" -----------> password is wrong!!");
+		return -1;
+	}
+	else
+	{
+		printf(" -----------> extracting the storage (%d,%d)...",x,y);
+		printStorageInside(x,y);
+		initStorage(x,y);
+		return 0;
+	}
+
 }
 
 //find my package from the storage
