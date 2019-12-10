@@ -138,6 +138,9 @@ int str_createSystem(char* filepath) {
 	fp = fopen("filepath","r");
 	fscanf(fp,"%d %d\n\n",&N,&M);
 	
+	systemSize[0]=N;
+	systemSize[1]=M;
+	
 	deliverySystem = (storage_t**)malloc(sizeof(storage_t*)*N);
 	
 	if (deliverySystem == 0)
@@ -159,6 +162,7 @@ int str_createSystem(char* filepath) {
 				deliverySystem[j][k].passwd[0] = 0;
 				fscanf(fp,"%d %d %s %s\n",&deliverySystem[j][k].building,&deliverySystem[j][k].room,&deliverySystem[j][k].passwd,&deliverySystem[j][k].context);
 				deliverySystem[j][k].cnt++;
+				storedCnt++;
 			}
 		}
 	}
