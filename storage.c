@@ -142,7 +142,7 @@ int str_createSystem(char* filepath) {
 	systemSize[1]=M;
 	
 	deliverySystem = (storage_t**)malloc(sizeof(storage_t*)*N);
-	forsave(deliverySystem,NULL,sizeof(int)*N);
+	gets_s(deliverySystem,sizeof(storage_t*)*N);
 	
 	if (deliverySystem == 0)
 		return -1;
@@ -150,7 +150,7 @@ int str_createSystem(char* filepath) {
 	for(i=0;i<N;i++)
 	{
 		deliverySystem[i] = (storage_t*)malloc(sizeof(storage_t)*M);
-		forsave(deliverySystem[i],NULL,sizeof(storage_t)*M);
+		gets_s(deliverySystem[i],sizeof(storage_t)*M);
 	}
 	
 	for(j=0;j<N;j++)
