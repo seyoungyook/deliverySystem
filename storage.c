@@ -54,6 +54,19 @@ static void printStorageInside(int x, int y) {
 //int x, int y : cell coordinate to be initialized
 static void initStorage(int x, int y) {
 	
+	int i;
+	
+	deliverySystem[x][y].building = 0;
+	deliverySystem[x][y].room = 0;
+	deliverySystem[x][y].context = NULL;
+	
+	for(i=0;i<(MAX_MSG_SIZE+1);i++)
+	{
+		deliverySystem[x][y].passwd[i] = 0;
+	}
+	
+	deliverySystem[x][y].cnt--;
+	
 }
 
 //get password input and check if it is correct for the cell (x,y)
@@ -206,6 +219,8 @@ int str_pushToStorage(int x, int y, int nBuilding, int nRoom, char msg[MAX_MSG_S
 		deliverySystem[x][y].passwd[i] = passwd[i];
 	}
 	
+	deliverySystem[x][y].cnt++;
+	
 	return 0;
 	
 }
@@ -218,8 +233,12 @@ int str_pushToStorage(int x, int y, int nBuilding, int nRoom, char msg[MAX_MSG_S
 //return : 0 - successfully extracted, -1 = failed to extract
 int str_extractStorage(int x, int y) {
 	
+	printStorageInside(x,y);
+	
+	initStorage(x,y);
 	
 	
+	return 0;
 }
 
 //find my package from the storage
