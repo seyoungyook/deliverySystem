@@ -26,8 +26,8 @@ static storage_t** deliverySystem; 			//deliverySystem
 static int storedCnt = 0;					//number of cells occupied
 static int systemSize[2] = {0, 0};  		//row/column of the delivery system
 static char masterPassword[PASSWD_LEN+1];	//master password
-static int N = 0;
-static int M = 0;
+static int N;
+static int M;
 
 
 
@@ -58,7 +58,7 @@ static void initStorage(int x, int y) {
 	
 	deliverySystem[x][y].building = 0;
 	deliverySystem[x][y].room = 0;
-	deliverySystem[x][y].context = NULL;
+	free(deliverySystem[x][y].context);
 	
 	for(i=0;i<(MAX_MSG_SIZE+1);i++)
 	{
@@ -66,6 +66,7 @@ static void initStorage(int x, int y) {
 	}
 	
 	deliverySystem[x][y].cnt--;
+	storedCnt--;
 	
 }
 
@@ -115,6 +116,7 @@ int str_backupSystem(char* filepath) {
 			if( deliverySystem[i][j].cnt == 1 )
 			{
 				fprintf("%d %d %d %d %c%c%c%c %s",i,j,deliverySystem[i][j].building, deliverySystem[i][j].room,deliverySystem[i][j].passwd[1],deliverySystem[i][j].passwd[2],deliverySystem[i][j].passwd[3],deliverySystem[i][j].passwd[4],deliverySystem[i][j].context);
+				free(deliverySystem[i][j].context);
 			}
 		}
 	}
@@ -135,14 +137,14 @@ int str_createSystem(char* filepath) {
 	
 	FILE *fp;
 	
-	fp = fopen("filepath","r");
-	fscanf(fp,"%d %d\n\n",&N,&M);
+	fp = fopen(filepath,"r");
+	fscanf(fp,"%d %d",&N,&M);
+	fscanf(fp,"%s",&masterPassword);
 	
-	systemSize[0]=N;
-	systemSize[1]=M;
+	systemSize[0] = N;
+	systemSize[1] = M;
 	
 	deliverySystem = (storage_t**)malloc(sizeof(storage_t*)*N);
-	gets_s(deliverySystem,sizeof(storage_t*)*N);
 	
 	if (deliverySystem == 0)
 		return -1;
@@ -150,7 +152,6 @@ int str_createSystem(char* filepath) {
 	for(i=0;i<N;i++)
 	{
 		deliverySystem[i] = (storage_t*)malloc(sizeof(storage_t)*M);
-		gets_s(deliverySystem[i],sizeof(storage_t)*M);
 	}
 	
 	for(j=0;j<N;j++)
@@ -162,6 +163,7 @@ int str_createSystem(char* filepath) {
 			if (j==n && k==m)
 			{
 				deliverySystem[j][k].passwd[0] = 0;
+				deliverySystem[j][k].context = (char*)malloc(sizeof(char)*(MAX_MSG_SIZE+1));
 				fscanf(fp,"%d %d %s %s\n",&deliverySystem[j][k].building,&deliverySystem[j][k].room,&deliverySystem[j][k].passwd,&deliverySystem[j][k].context);
 				deliverySystem[j][k].cnt++;
 				storedCnt++;
