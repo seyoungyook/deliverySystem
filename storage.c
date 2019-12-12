@@ -60,12 +60,12 @@ static void initStorage(int x, int y) {
 	deliverySystem[x][y].room = 0;
 	free(deliverySystem[x][y].context);
 	
-	for(i=0;i<(MAX_MSG_SIZE+1);i++)
+	for(i=0;i<(PASSWD_LEN+1);i++)
 	{
-		deliverySystem[x][y].passwd[i] = 0;
+		deliverySystem[x][y].passwd[i] = NULL;
 	}
 	
-	deliverySystem[x][y].cnt--;
+	deliverySystem[x][y].cnt=0;
 	storedCnt--;
 	
 }
@@ -115,7 +115,7 @@ int str_backupSystem(char* filepath) {
 		{
 			if( deliverySystem[i][j].cnt == 1 )
 			{
-				fprintf("%d %d %d %d %c%c%c%c %s",i,j,deliverySystem[i][j].building, deliverySystem[i][j].room,deliverySystem[i][j].passwd[1],deliverySystem[i][j].passwd[2],deliverySystem[i][j].passwd[3],deliverySystem[i][j].passwd[4],deliverySystem[i][j].context);
+				fprintf("%d %d %d %d %s %s",i,j,deliverySystem[i][j].building, deliverySystem[i][j].room,deliverySystem[i][j].passwd,deliverySystem[i][j].context);
 				free(deliverySystem[i][j].context); // release remaining memory
 			}
 		}
@@ -138,8 +138,8 @@ int str_createSystem(char* filepath) {
 	FILE *fp;
 	
 	fp = fopen(filepath,"r");
-	fscanf(fp,"%d %d\n",&N,&M); // read N,N from txt
-	fscanf(fp,"%s\n",&masterPassword); // read masterPassword form txt
+	fscanf(fp,"%d %d",&N,&M); // read N,N from txt
+	fscanf(fp,"%s",&masterPassword); // read masterPassword form txt
 	
 	systemSize[0] = N; //setting system size
 	systemSize[1] = M;
@@ -158,6 +158,16 @@ int str_createSystem(char* filepath) {
 	
 	// save storage information to deliverySystem
 	
+	for(j=0;j<N;j++)
+	{
+		for(k=0;k<M;k++)
+		{
+			initStorage(j, k);
+		}
+	}
+
+	
+	
 	fscanf(fp,"%d %d",&n,&m);
 	
 	for(j=0;j<N;j++)
@@ -167,10 +177,10 @@ int str_createSystem(char* filepath) {
 			
 			if (j==n && k==m)
 			{
-				deliverySystem[j][k].passwd[0] = 0;
+				//deliverySystem[j][k].passwd[0] = 0;
 				deliverySystem[j][k].context = (char*)malloc(sizeof(char)*(MAX_MSG_SIZE+1)); //allocate memory to context
-				fscanf(fp,"%d %d %s %s\n",&deliverySystem[j][k].building,&deliverySystem[j][k].room,&deliverySystem[j][k].passwd,&deliverySystem[j][k].context);
-				deliverySystem[j][k].cnt++;
+				fscanf(fp,"%d %d %s %s",&deliverySystem[j][k].building,&deliverySystem[j][k].room,&deliverySystem[j][k].passwd,&deliverySystem[j][k].context);
+				deliverySystem[j][k].cnt=1;
 				storedCnt++;
 				fscanf(fp,"%d %d",&n,&m);
 			}
@@ -312,7 +322,7 @@ int str_findStorage(int nBuilding, int nRoom) {
 		{
 			if( deliverySystem[i][j].building == nBuilding && deliverySystem[i][j].room == nRoom )
 			{
-				printf("-----------> Found a package in (%d,%d)",i,j);
+				printf("-----------> Found a package in (%d,%d)\n",i,j);
 				cnt++;
 			}
 		}
