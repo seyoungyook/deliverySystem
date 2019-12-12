@@ -108,7 +108,7 @@ int str_backupSystem(char* filepath) {
 	fp = fopen(filepath,"w+"); // erase all txt and rewrite
 	
 	if (fp==0)
-		return -1; //failed to backup
+		return -1; // when failed to backup
 	
 	fprintf(fp,"%d %d\n",N,M);
 	
@@ -188,7 +188,6 @@ int str_createSystem(char* filepath) {
 			
 			if (j==n && k==m)
 			{
-				//deliverySystem[j][k].passwd[0] = 0;
 				fscanf(fp,"%d",&deliverySystem[j][k].building);
 				fscanf(fp,"%d",&deliverySystem[j][k].room);
 				fscanf(fp,"%s",deliverySystem[j][k].passwd);
@@ -196,7 +195,7 @@ int str_createSystem(char* filepath) {
 				deliverySystem[j][k].cnt=1;
 				storedCnt++;
 				
-				if (feof(fp)==0)
+				if (feof(fp)==0) //not at end of file
 				{
 					fscanf(fp,"%d %d",&n,&m);
 				}
@@ -215,6 +214,8 @@ void str_freeSystem(void) {
 	
 	int i,j;
 	
+	//free the memory of context
+	
 	for(i=0;i<N;i++)
 	{
 		for(j=0;j<M;j++)
@@ -222,6 +223,8 @@ void str_freeSystem(void) {
 			free(deliverySystem[i][j].context);
 		}
 	}
+	
+	//free the memory of deliverySystem
 	
 	for(i=0;i<N;i++)
 	{
@@ -298,6 +301,8 @@ int str_pushToStorage(int x, int y, int nBuilding, int nRoom, char msg[MAX_MSG_S
 	if ( deliverySystem[x][y].cnt!=0) //when failed to put
 		return -1;
 	
+	//put the information of storage to cell
+	
 	deliverySystem[x][y].building = nBuilding;
 	deliverySystem[x][y].room = nRoom;
 	
@@ -327,7 +332,7 @@ int str_extractStorage(int x, int y) {
 	
 	int i;
 	
-	if(inputPasswd(x,y)!=0)
+	if(inputPasswd(x,y)!=0) //when password is wrong
 	{
 		printf(" -----------> password is wrong!!");
 		return -1;
