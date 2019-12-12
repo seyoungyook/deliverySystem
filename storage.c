@@ -66,7 +66,6 @@ static void initStorage(int x, int y) {
 	}
 	
 	deliverySystem[x][y].cnt=0;
-	storedCnt--;
 	
 }
 
@@ -304,6 +303,7 @@ int str_extractStorage(int x, int y) {
 		printf(" -----------> extracting the storage (%d,%d)...",x,y);
 		printStorageInside(x,y);
 		initStorage(x,y); //because user extract storage
+		storedCnt--;
 		return 0;
 	}
 	
