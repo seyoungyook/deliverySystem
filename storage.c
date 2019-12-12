@@ -186,7 +186,11 @@ int str_createSystem(char* filepath) {
 				fscanf(fp,"%d %d %s %s",&deliverySystem[j][k].building,&deliverySystem[j][k].room,&deliverySystem[j][k].passwd,&deliverySystem[j][k].context);
 				deliverySystem[j][k].cnt=1;
 				storedCnt++;
-				fscanf(fp,"%d %d",&n,&m);
+				
+				if (feof(fp)==0)
+				{
+					fscanf(fp,"%d %d",&n,&m);
+				}
 			}
 		}
 	}
