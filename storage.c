@@ -108,7 +108,7 @@ int str_backupSystem(char* filepath) {
 	
 	fp = fopen("filepath","w+"); // erase all txt and rewrite
 	fprintf(fp,"%d %d\n",N,M);
-	fprintf(fp,"%c%c%c%c",masterPassword[1],masterPassword[2],masterPassword[3],masterPassword[4]);
+	fprintf(fp,"%s",masterPassword);
 	
 	for(i=0;i<N;i++)
 	{
