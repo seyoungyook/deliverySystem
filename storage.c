@@ -158,11 +158,12 @@ int str_createSystem(char* filepath) {
 	
 	// save storage information to deliverySystem
 	
+	fscanf(fp,"%d %d",&n,&m);
+	
 	for(j=0;j<N;j++)
 	{
 		for(k=0;k<M;k++)
 		{
-			fscanf(fp,"%d %d",&n,&m);
 			
 			if (j==n && k==m)
 			{
@@ -171,6 +172,7 @@ int str_createSystem(char* filepath) {
 				fscanf(fp,"%d %d %s %s\n",&deliverySystem[j][k].building,&deliverySystem[j][k].room,&deliverySystem[j][k].passwd,&deliverySystem[j][k].context);
 				deliverySystem[j][k].cnt++;
 				storedCnt++;
+				fscanf(fp,"%d %d",&n,&m);
 			}
 		}
 	}
