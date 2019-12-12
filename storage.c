@@ -157,7 +157,7 @@ int str_createSystem(char* filepath) {
 		deliverySystem[i] = (storage_t*)malloc(sizeof(storage_t)*M);
 	}
 	
-	// save storage information to deliverySystem
+	//initialize the storage
 	
 	for(j=0;j<N;j++)
 	{
@@ -167,7 +167,7 @@ int str_createSystem(char* filepath) {
 		}
 	}
 
-	
+	// save storage information to deliverySystem
 	
 	fscanf(fp,"%d %d",&n,&m);
 	
