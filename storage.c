@@ -107,6 +107,9 @@ int str_backupSystem(char* filepath) {
 	
 	fp = fopen(filepath,"w+"); // erase all txt and rewrite
 	
+	if (fp==0)
+		return -1; //failed to backup
+	
 	fprintf(fp,"%d %d\n",N,M);
 	
 	fprintf(fp,"%s\n",masterPassword);
@@ -119,7 +122,7 @@ int str_backupSystem(char* filepath) {
 			{
 				fprintf(fp,"%d %d ",i,j);
 				fprintf(fp,"%d %d ",deliverySystem[i][j].building, deliverySystem[i][j].room);
-				fprintf(fp,"%s %s \n",&deliverySystem[i][j].passwd,&deliverySystem[i][j].context);
+				fprintf(fp,"%s %s \n",deliverySystem[i][j].passwd,deliverySystem[i][j].context);
 			}
 		}
 	}
@@ -186,7 +189,10 @@ int str_createSystem(char* filepath) {
 			if (j==n && k==m)
 			{
 				//deliverySystem[j][k].passwd[0] = 0;
-				fscanf(fp,"%d %d %s %s",&deliverySystem[j][k].building,&deliverySystem[j][k].room,&deliverySystem[j][k].passwd,&deliverySystem[j][k].context);
+				fscanf(fp,"%d",&deliverySystem[j][k].building);
+				fscanf(fp,"%d",&deliverySystem[j][k].room);
+				fscanf(fp,"%s",deliverySystem[j][k].passwd);
+				fscanf(fp,"%s",deliverySystem[j][k].context);
 				deliverySystem[j][k].cnt=1;
 				storedCnt++;
 				
@@ -288,6 +294,9 @@ int str_checkStorage(int x, int y) {
 int str_pushToStorage(int x, int y, int nBuilding, int nRoom, char msg[MAX_MSG_SIZE+1], char passwd[PASSWD_LEN+1]) {
 	
 	int i;
+	
+	if ( deliverySystem[x][y].cnt!=0) //when failed to put
+		return -1;
 	
 	deliverySystem[x][y].building = nBuilding;
 	deliverySystem[x][y].room = nRoom;
