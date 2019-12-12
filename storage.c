@@ -106,9 +106,9 @@ int str_backupSystem(char* filepath) {
 	
 	FILE *fp;
 	
-	fp = fopen("filepath","w+"); // erase all txt and rewrite
+	fp = fopen(filepath,"w+"); // erase all txt and rewrite
 	fprintf(fp,"%d %d\n",N,M);
-	fprintf(fp,"%s",masterPassword);
+	fprintf(fp,"%s\n",masterPassword);
 	
 	for(i=0;i<N;i++)
 	{
@@ -116,7 +116,7 @@ int str_backupSystem(char* filepath) {
 		{
 			if( deliverySystem[i][j].cnt == 1 )
 			{
-				fprintf("%d %d %d %d %s %s",i,j,deliverySystem[i][j].building, deliverySystem[i][j].room,deliverySystem[i][j].passwd,deliverySystem[i][j].context);
+				fprintf("%d %d %d %d %s %s\n",i,j,deliverySystem[i][j].building, deliverySystem[i][j].room,deliverySystem[i][j].passwd,deliverySystem[i][j].context);
 				free(deliverySystem[i][j].context); // release remaining memory
 			}
 		}
@@ -150,7 +150,10 @@ int str_createSystem(char* filepath) {
 	deliverySystem = (storage_t**)malloc(sizeof(storage_t*)*N);
 	
 	if (deliverySystem == 0)
+	{
+		printf("fail to allocate memory to deliverySystem");
 		return -1;
+	}
 	
 	for(i=0;i<N;i++)
 	{
