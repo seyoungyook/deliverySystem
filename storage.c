@@ -61,7 +61,7 @@ static void initStorage(int x, int y) {
 	
 	for(i=0;i<(PASSWD_LEN+1);i++)
 	{
-		deliverySystem[x][y].passwd[i] = NULL;
+		deliverySystem[x][y].passwd[i] = 0;
 	}
 	
 	deliverySystem[x][y].cnt=0;
@@ -181,11 +181,11 @@ int str_createSystem(char* filepath) {
 	{
 		for(k=0;k<M;k++)
 		{
+			deliverySystem[j][k].context = (char*)malloc(sizeof(char)*(MAX_MSG_SIZE+1)); //allocate memory to context
 			
 			if (j==n && k==m)
 			{
 				//deliverySystem[j][k].passwd[0] = 0;
-				deliverySystem[j][k].context = (char*)malloc(sizeof(char)*(MAX_MSG_SIZE+1)); //allocate memory to context
 				fscanf(fp,"%d %d %s %s",&deliverySystem[j][k].building,&deliverySystem[j][k].room,&deliverySystem[j][k].passwd,&deliverySystem[j][k].context);
 				deliverySystem[j][k].cnt=1;
 				storedCnt++;
@@ -207,7 +207,15 @@ int str_createSystem(char* filepath) {
 //free the memory of the deliverySystem 
 void str_freeSystem(void) {
 	
-	int i;
+	int i,j;
+	
+	for(i=0;i<N;i++)
+	{
+		for(j=0;j<M;j++)
+		{
+			free(deliverySystem[i][j].context);
+		}
+	}
 	
 	for(i=0;i<N;i++)
 	{
@@ -288,8 +296,12 @@ int str_pushToStorage(int x, int y, int nBuilding, int nRoom, char msg[MAX_MSG_S
 	{
 		deliverySystem[x][y].passwd[i] = passwd[i];
 	}
-	deliverySystem[x][y].context = (char*)malloc(sizeof(char)*(MAX_MSG_SIZE+1));
-	deliverySystem[x][y].context = msg;
+	
+	for(i=0;i<(MAX_MSG_SIZE+1);i++)
+	{
+		deliverySystem[x][y].context[i] = msg[i];
+	}
+	
 	deliverySystem[x][y].cnt=1;
 	
 	return 0;
@@ -304,6 +316,8 @@ int str_pushToStorage(int x, int y, int nBuilding, int nRoom, char msg[MAX_MSG_S
 //return : 0 - successfully extracted, -1 = failed to extract
 int str_extractStorage(int x, int y) {
 	
+	int i;
+	
 	if(inputPasswd(x,y)!=0)
 	{
 		printf(" -----------> password is wrong!!");
@@ -314,12 +328,14 @@ int str_extractStorage(int x, int y) {
 		printf(" -----------> extracting the storage (%d,%d)...",x,y);
 		printStorageInside(x,y);
 		initStorage(x,y); //because user extract storage
-		free(deliverySystem[x][y].context);
+		for(i=0;i<(MAX_MSG_SIZE+1);i++)
+		{
+			deliverySystem[x][y].context[i] = 0;
+		}
 		storedCnt--;
 		return 0;
 	}
 	
-	return 0;
 
 }
 
