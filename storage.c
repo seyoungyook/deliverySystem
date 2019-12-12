@@ -58,7 +58,6 @@ static void initStorage(int x, int y) {
 	
 	deliverySystem[x][y].building = 0; // for initialization
 	deliverySystem[x][y].room = 0;
-	free(deliverySystem[x][y].context);
 	
 	for(i=0;i<(PASSWD_LEN+1);i++)
 	{
@@ -87,8 +86,7 @@ static int inputPasswd(int x, int y) {
 	}
 	else
 		return -1; 
-		
-	return 1;	
+			
 }
 
 
@@ -104,10 +102,13 @@ int str_backupSystem(char* filepath) {
 	
 	int i,j;
 	
+	
 	FILE *fp;
 	
 	fp = fopen(filepath,"w+"); // erase all txt and rewrite
+	
 	fprintf(fp,"%d %d\n",N,M);
+	
 	fprintf(fp,"%s\n",masterPassword);
 	
 	for(i=0;i<N;i++)
@@ -116,13 +117,16 @@ int str_backupSystem(char* filepath) {
 		{
 			if( deliverySystem[i][j].cnt == 1 )
 			{
-				fprintf("%d %d %d %d %s %s\n",i,j,deliverySystem[i][j].building, deliverySystem[i][j].room,deliverySystem[i][j].passwd,deliverySystem[i][j].context);
+				fprintf(fp,"%d %d ",i,j);
+				fprintf(fp,"%d %d ",deliverySystem[i][j].building, deliverySystem[i][j].room);
+				fprintf(fp,"%s %s \n",&deliverySystem[i][j].passwd,&deliverySystem[i][j].context);
 				free(deliverySystem[i][j].context); // release remaining memory
 			}
 		}
 	}
 	
 	fclose(fp);
+	
 	
 	return 0;
 }
@@ -310,6 +314,7 @@ int str_extractStorage(int x, int y) {
 		printf(" -----------> extracting the storage (%d,%d)...",x,y);
 		printStorageInside(x,y);
 		initStorage(x,y); //because user extract storage
+		free(deliverySystem[x][y].context);
 		storedCnt--;
 		return 0;
 	}
