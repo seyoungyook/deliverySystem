@@ -88,6 +88,8 @@ static int inputPasswd(int x, int y) {
 	}
 	else
 		return -1; 
+		
+	return 1;	
 }
 
 
@@ -204,6 +206,7 @@ void str_freeSystem(void) {
 	}
 	
 	free(deliverySystem);
+
 	
 }
 
@@ -272,13 +275,12 @@ int str_pushToStorage(int x, int y, int nBuilding, int nRoom, char msg[MAX_MSG_S
 	deliverySystem[x][y].building = nBuilding;
 	deliverySystem[x][y].room = nRoom;
 	
-	for(i=0;i<(MAX_MSG_SIZE+1);i++)
+	for(i=0;i<(PASSWD_LEN+1);i++)
 	{
 		deliverySystem[x][y].passwd[i] = passwd[i];
-		deliverySystem[x][y].context[i] = msg[i];
 	}
-	
-	deliverySystem[x][y].cnt++;
+	deliverySystem[x][y].context = msg;
+	deliverySystem[x][y].cnt=1;
 	
 	return 0;
 	
@@ -304,6 +306,8 @@ int str_extractStorage(int x, int y) {
 		initStorage(x,y); //because user extract storage
 		return 0;
 	}
+	
+	return 0;
 
 }
 
