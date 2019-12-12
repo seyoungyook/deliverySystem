@@ -120,7 +120,6 @@ int str_backupSystem(char* filepath) {
 				fprintf(fp,"%d %d ",i,j);
 				fprintf(fp,"%d %d ",deliverySystem[i][j].building, deliverySystem[i][j].room);
 				fprintf(fp,"%s %s \n",&deliverySystem[i][j].passwd,&deliverySystem[i][j].context);
-				free(deliverySystem[i][j].context); // release remaining memory
 			}
 		}
 	}
@@ -289,6 +288,7 @@ int str_pushToStorage(int x, int y, int nBuilding, int nRoom, char msg[MAX_MSG_S
 	{
 		deliverySystem[x][y].passwd[i] = passwd[i];
 	}
+	deliverySystem[x][y].context = (char*)malloc(sizeof(char)*(MAX_MSG_SIZE+1));
 	deliverySystem[x][y].context = msg;
 	deliverySystem[x][y].cnt=1;
 	
